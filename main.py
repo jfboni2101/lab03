@@ -1,16 +1,53 @@
-# This is a sample Python script.
+import numpy as np
 
-# Press Maiusc+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+from datasets import gaussians_dataset, people_dataset
 
+from utils import people_visualization
+from utils import people_visualize_prediction
+from utils import plot_pegasos_margin
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+from svm import SVM
 
+#np.random.seed(191090)
 
-# Press the green button in the gutter to run the script.
+def main_people():
+    """ Main function """
+
+    #x_train, y_train, x_test, y_test = gaussians_dataset(2, [100, 150], [[1, 3], [-4, 8]], [[2, 3], [4, 1]])
+    X_img_train, x_train, y_train, X_img_test, x_test, y_test = people_dataset('data')
+    people_visualization(X_img_train, y_train)
+
+    svm_alg = SVM(n_epochs=100, lambDa= 0.001, use_bias=True)
+
+    # train
+    svm_alg.fit_gd(x_train, y_train, verbose=True)
+
+    # test
+    predictions = svm_alg.predict(x_test)
+
+    accuracy = float(np.sum(predictions == y_test)) / y_test.shape[0]
+    print('Test accuracy: {}'.format(accuracy))
+
+    people_visualize_prediction(X_img_test, y_test, predictions)
+
+def main_gaussian():
+
+    x_train, y_train, x_test, y_test = gaussians_dataset(2, [100, 150], [[1, 3], [-4, 8]], [[2, 3], [4, 1]])
+
+    svm_alg = SVM(n_epochs=100, lambDa= 0.001, use_bias=True)
+
+    # train
+    svm_alg.fit_gd(x_train, y_train, verbose=True)
+
+    # test
+    predictions = svm_alg.predict(x_test)
+
+    accuracy = float(np.sum(predictions == y_test)) / y_test.shape[0]
+    print('Test accuracy: {}'.format(accuracy))
+
+    plot_pegasos_margin(x_test, y_test, svm_alg)
+
+# entry point
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    main_gaussian()
+    #main_people()
