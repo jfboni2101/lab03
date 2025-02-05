@@ -53,11 +53,7 @@ class SVM:
         float
             the value of the pegasos loss.
         """
-
-        """
-        Write HERE the code for computing the Pegasos loss function.
-        """
-        return np.random.rand(1)[0]
+        return 0.5*self._lambda*norm(self._w) + np.mean(np.maximum(np.zeros((y_true.shape[0],)), 1.0 - y_true*y_pred))
 
     def fit_gd(self, X, Y, verbose=False):
         """
@@ -86,30 +82,26 @@ class SVM:
         # loop over epochs
         for e in range(1, self._n_epochs+1):
             for j in range(n_samples):
-                """
-                Write HERE the update step.
-                """
-                pass
+                X_j, y_j = X[j,:], Y[j]
+                t += 1
+                n_t = 1.0/(t*self._lambda)
+                X_j_pred = np.dot(X_j, self._w)
+                if y_j*X_j_pred < 1:
+                    self._w = (1.0 - n_t*self._lambda)*self._w + n_t*y_j*X_j
+                else:
+                    self._w = (1.0 - n_t*self._lambda)*self._w
 
             # predict training data
             cur_prediction = np.dot(X, self._w)
 
             # compute (and print) cost
             cur_loss = self.loss(y_true=Y, y_pred=cur_prediction)
-
             if verbose:
                 print("Epoch {} Loss {}".format(e, cur_loss))
 
     def predict(self, X):
-
         if self._use_bias:
             X = np.concatenate([X, np.ones((X.shape[0],1),dtype=X.dtype)], axis=-1)
+        return np.where(np.dot(X, self._w) > 0.0, self._original_labels[1], self._original_labels[0])
 
-        """
-        Write HERE the criterium used during inference. 
-        W * X > 0 -> positive class
-        X * X < 0 -> negative class
-        """
-        return np.where(np.random.choice(2, X.shape[0]) > 0.0,
-                        self._original_labels[1], self._original_labels[0])
 

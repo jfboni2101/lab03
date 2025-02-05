@@ -15,7 +15,7 @@ def main_people():
 
     #x_train, y_train, x_test, y_test = gaussians_dataset(2, [100, 150], [[1, 3], [-4, 8]], [[2, 3], [4, 1]])
     X_img_train, x_train, y_train, X_img_test, x_test, y_test = people_dataset('data')
-    people_visualization(X_img_train, y_train)
+    # people_visualization(X_img_train, y_train)
 
     svm_alg = SVM(n_epochs=100, lambDa= 0.001, use_bias=True)
 
@@ -49,5 +49,5 @@ def main_gaussian():
 
 # entry point
 if __name__ == '__main__':
-    main_gaussian()
-    #main_people()
+    #main_gaussian()
+    main_people()

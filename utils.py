@@ -106,14 +106,14 @@ def people_visualization(X, y):
     X_0 = X[y == 0.0]
     random_idx_1 = np.random.choice(np.arange(0, X_0.shape[0]))
     plt.imshow(X_0[random_idx_1], cmap='gray')
-    plt.grid(b=False)
+    plt.grid(visible=False)
 
     plt.subplot(122)
     plt.title('Class 1. People')
     X_1 = X[y == 1.0]
     random_idx_2 = np.random.choice(np.arange(0, X_1.shape[0]))
     plt.imshow(X_1[random_idx_2], cmap='gray')
-    plt.grid(b=False)
+    plt.grid(visible=False)
 
     plt.show()
     plt.waitforbuttonpress()
@@ -131,7 +131,7 @@ def people_visualize_prediction(X, y, y_pred):
             title = 'GT: {} \n Pred: {}'.format(labels[int(y[idx])], labels[int(y_pred[idx])])
             color_title = 'green' if int(y[idx]) == int(y_pred[idx]) else 'red'
             subplots[i, j].set_title(title, color=color_title, fontweight="bold")
-            subplots[i, j].grid(b=False)
+            subplots[i, j].grid(visible=False)
 
     f.set_size_inches(13.5, 7.5)
     plt.waitforbuttonpress()
